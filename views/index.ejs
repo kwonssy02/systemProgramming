@@ -43,6 +43,11 @@
 
 			var enteredContent;
 			$(document).ready(function(){
+				if($("#post_container").children().length < 10)  {
+					$("#more").hide();
+					$("#noMore").show();
+				}
+
 				addCommentEvent();
 				
 				$("#more").click(function() {
@@ -119,9 +124,9 @@
 									</div> \
 								</div>";
 							}
-							if(posts.length > 0)
-								$("#post_container")[0].innerHTML += newHTML;
-							else  {
+							
+							$("#post_container")[0].innerHTML += newHTML;
+							if(posts.length < 10)  {
 								$("#more").hide();
 								$("#noMore").show();
 							}

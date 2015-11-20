@@ -100,6 +100,11 @@ a:hover {
   outline: 0;
 }
 
+a:visited {
+  color:#4090db;
+  text-decoration: none;
+}
+
 /* Text-level semantics
    ========================================================================== */
 

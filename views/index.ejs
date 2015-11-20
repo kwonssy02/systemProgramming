@@ -31,7 +31,7 @@
 								var commentDiv = enteredContent.parent().parent().parent().children("div[name=commentDiv]")[0];
 								var newCommentHTML = "";
 								for(var i=0; i<data.length; i++) {
-									newCommentHTML += "<p style='font-size:14px;'><span style='color:#125587; font-weight:400;'>"+ data[i].author + "</span>&nbsp;" + data[i].content +"</p>";
+									newCommentHTML += "<p style='font-size:14px; margin-bottom:5px;'><span style='color:#125587; font-weight:400;'>"+ data[i].author + "</span>&nbsp;" + data[i].content +"</p>";
 								}
 								commentDiv.innerHTML = newCommentHTML;
 								enteredContent.show();
@@ -85,9 +85,9 @@
 			dateDiff = secDiff + "초 전";
 %>
 
-				<div style="border-top: 1px solid #EDEEEE; border-bottom: 1px solid #EDEEEE; background-color:#FAFAFA; margin-bottom:30px; border-radius: 15px; box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);"> <!-- post -->
+				<div style="border-top: 1px solid #EDEEEE; border-bottom: 1px solid #EDEEEE; background-color:#FAFAFA; margin-bottom:50px; border-radius: 15px; box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);"> <!-- post -->
 					<div style="padding: 20px 20px; height: 20px; vertical-align:middle;"> <!-- post header -->
-						<img src="/images/pin.png" style="width:20px; height:32px; margin-top:-7px; float:left;"/>
+						<img src="/images/pin.tiff" style="width:30px; height:30px; margin-top:-7px; float:left; border-radius: 50%; border: 1px solid #cccfd0; box-sizing: border-box;"/>
 						<div style="width:20%; position:relative; float:left; margin-left:10px;">
 							<span style="font-size:14px; color: #125587; font-weight:600;"><%=post.location%></span>
 						</div>
@@ -108,7 +108,7 @@
 			{
 				numOfComments++;
 %>          
-						<p style="font-size:14px;"><span style="color:#125587; font-weight:400;"><%=comment.author%></span>&nbsp;<%=comment.content%></p>
+						<p style="font-size:14px; margin-bottom:5px;"><span style="color:#125587; font-weight:400;"><%=comment.author%></span>&nbsp;<%=comment.content%></p>
 <%
 			}
 		}

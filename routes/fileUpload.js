@@ -11,7 +11,7 @@ require('./dbconnection')();
  * output : 없음
  */
 const postImageURL = ("/postImage/:loc");
-const postImageQuery = ("INSERT INTO image (imageId, location, regDate) values (?, ?, now()) ;");
+const postImageQuery = ("INSERT INTO image (imageId, location, regiDate) values (?, ?, now()) ;");
 
 /**
  * 새로운 이미지 아이디 가져오기
@@ -90,5 +90,15 @@ module.exports = function(app) {
 
 	app.get('/images', function (req, res){
 		
+	});
+	
+	app.get('/image/:imageId', function (req, res) {
+		var imageId = req.params.imageId;
+		var filePath = './images/' + imageId + '.img';
+		console.log(filePath);
+		fs.readFile(filePath, function (error, data) {
+			res.writeHead(200, {'Content-Type': 'text/html'});
+			res.end(data);
+		});
 	});
 };

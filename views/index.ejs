@@ -1,11 +1,136 @@
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" /> 
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi" />--> 
+<link rel="stylesheet" href="/stylesheets/reset.css" />
+<link rel="stylesheet" href="/stylesheets/normalize.css" />
+<link rel="stylesheet" href="/stylesheets/fonts.css" />
+	  <head>
+		<title><%= title %></title>
+		<!--<link rel='stylesheet' href='/stylesheets/style.css' /> -->
+		<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>		
+		<script type="text/javascript">
+			var enteredContent;
+			$(document).ready(function(){
+				$("input[name=content]").keyup(function (key) {
+					if(key.keyCode == 13){//키가 13이면 실행 (엔터는 13)
+						enteredContent = $(this);
+						var imageId = $(this).parent()[0].imageId.value;
+						var author = $(this).parent()[0].author.value;
+						var content = $(this).val();
+						if(content == "") 
+							return false;
+						$(this).val("");
+						$(this).hide();
+						$(this).blur();
+						$.ajax('/addComment', {
+							type: 'POST',
+							data: JSON.stringify({imageId: imageId, author: author, content: content}),
+							contentType: 'application/json',
+							success: function(data) {
+								var commentDiv = enteredContent.parent().parent().parent().children("div[name=commentDiv]")[0];
+								var newCommentHTML = "";
+								for(var i=0; i<data.length; i++) {
+									newCommentHTML += "<p style='font-size:14px;'><span style='color:#125587; font-weight:400;'>"+ data[i].author + "</span>&nbsp;" + data[i].content +"</p>";
+								}
+								commentDiv.innerHTML = newCommentHTML;
+								enteredContent.show();
+							},
+							error  : function() { console.log('error');}
+						});
+					}
+ 
+				});
+				/*
+				$("img").load(function() {
+					console.log(this.width + " " + this.height);
+					if(this.width / this.height > 1)
+						this.style.width = "100%";
+					else
+						this.style.width = "100%";
+				});*/ 
+			});
+		</script>
+	</head>
+	<body>
+		<div style="width:100%">
+			<div style="max-width:600px; height: 77px; vertical-align:baseline; padding: 0 20px; margin:0 auto;">
+				<div style="width:100%; height:25px; padding:26px 0;">
+					<a href="/" style="background-image:url(/images/komera.png); width:102px; height:28px; background-size:102px 28px; display:inline-block; float:left;"></a>
+					<!--<div style="position:relative; width:100px; margi-right:-20px; float:right;">
+						<span>아주대</span>
+					</div>-->
+				</div>
+			</div>
+			<div style="max-width:600px; margin:0 auto;"> <!-- posts container -->
+<%
+	for(var i=0; i<posts.length; i++)
+	{
+		var post = posts[i];
+		var secDiff = parseInt(posts[i].secDiff);
+		var dateDiff;
+		if(secDiff >= (60*60*24*365))
+			dateDiff = parseInt(secDiff/(60*60*24*365)) + "년 전";
+		else if(secDiff >= (60*60*24*30))
+			dateDiff = parseInt(secDiff/(60*60*24*30)) + "달 전";
+		else if(secDiff >= (60*60*24*7))
+			dateDiff = parseInt(secDiff/(60*60*24*7)) + "주 전";
+		else if(secDiff >= (60*60*24))
+			dateDiff = parseInt(secDiff/(60*60*24)) + "일 전";
+		else if(secDiff >= (60*60))
+			dateDiff = parseInt(secDiff/(60*60)) + "시간 전";
+		else if(secDiff >= 60)
+			dateDiff = parseInt(secDiff/(60)) + "분 전";
+		else
+			dateDiff = secDiff + "초 전";
+%>
+
+				<div style="border-top: 1px solid #EDEEEE; border-bottom: 1px solid #EDEEEE; background-color:#FAFAFA; margin-bottom:30px; border-radius: 15px; box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);"> <!-- post -->
+					<div style="padding: 20px 20px; height: 20px; vertical-align:middle;"> <!-- post header -->
+						<div style="width:20%; position:absolute; ">
+							<span style="font-size:14px; color: #125587; font-weight:600;"><%=post.location%></span>
+						</div>
+						<div style="position:relative; float:right; margin-right:0px;">
+							<span style="color:#A6A8AB; font-size:14px;"><%=dateDiff%></span>
+						</div>
+					</div>
+					<div style="text-align:center; background-color:#EDEDED; position: relative; width: 100%; height: 0; padding-bottom: 75%;">
+						<img src="/image/<%=post.imageId%>" alt="이미지" style="height:100%;">
+					</div>
+					<div name="commentDiv" style="padding: 20px 20px;"> <!-- comment -->
+<%
+		var numOfComments = 0;
+		for(var j=0; j<comments.length; j++)
+		{	
+			var comment = comments[j];
+			if(comment.imageId == post.imageId) 
+			{
+				numOfComments++;
+%>          
+						<p style="font-size:14px;"><span style="color:#125587; font-weight:400;"><%=comment.author%></span>&nbsp;<%=comment.content%></p>
+<%
+			}
+		}
+		if(numOfComments == 0) 
+		{
+%>
+						<p style="font-size:14px;">댓글이 없습니다.</p>
+<%
+		}
+%>
+					</div>
+					<div style="padding: 10px 20px; border-top:1px solid #eeefef; margin-top: 9px;" > <!-- enter comment -->
+						<form onsubmit="return false;">
+							<input type="hidden" name="author" value="익명">
+							<input type="hidden" name="imageId" value="<%=post.imageId%>">
+							<input type="text" placeholder="댓글 달기.." name="content" style="font-size:14px; background: 0 0; border: none; outline: none; width: 100%">
+						</form>
+					</div>
+				</div>
+<%
+	}
+%>
+			</div>
+		</div>
+	</body>
 </html>

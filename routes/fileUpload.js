@@ -101,4 +101,14 @@ module.exports = function(app) {
 			res.end(data);
 		});
 	});
+
+	app.get('/cssImages/:fileName', function (req, res) {
+		var fileName = req.params.fileName;
+		var filePath = './public/images/' + fileName;
+		console.log(filePath);
+		fs.readFile(filePath, function (error, data) {
+			res.writeHead(200, {'Content-Type': 'text/html'});
+			res.end(data);
+		});
+	});
 };

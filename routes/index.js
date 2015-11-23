@@ -21,6 +21,13 @@ const selectMorePostsURL = ("/morePosts/:imageId")
 const selectMorePostsQuery = ("SELECT imageId, location, DATE_FORMAT(regiDate, '%Y/%m/%d %H:%i:%s') as regiDate, TIMESTAMPDIFF(SECOND, regiDate, now()) secDiff FROM image where regiDate < (SELECT regiDate from image where imageId = ?) ORDER BY regiDate DESC LIMIT 10");
 const selectMoreCommentsQuery = ("SELECT A.imageId imageId, A.author author, A.content content, DATE_FORMAT(A.regiDate, '%Y/%m/%d %H:%i:%s') as regiDate FROM comment A LEFT JOIN image B ON A.imageId = B.imageId where B.regiDate < (SELECT regiDate from image where imageId = ?) ORDER BY A.regiDate ASC");
 
+const setLocationURL = ("/setLocation");
+const selectLocationsQuery = ("SELECT sensorId, location FROM sensor");
+
+const updateLocationURL = ("/updateLocation");
+const updateLocationQUERY = ("UPDATE sensor SET location = ? WHERE sensorId = ?");
+
+//index.ejs 홈
 router.get(homeURL, home);
 function home(req, res, next) {
     var data = {};
@@ -82,6 +89,36 @@ function selectMorePosts(req, res, next) {
                 result["comments"] = rows2;
                 res.json(result);
         });
+    });
+}
+
+//index.ejs 홈
+router.get(setLocationURL, setLocation);
+function setLocation(req, res, next) {
+    var data = {};
+    data['title'] = '코메라 센서 위치 수정';
+    connection.query(selectLocationsQuery, function(err, rows, fields) {
+        if(err) {
+            throw err;
+        }
+        data['locations'] = rows;
+        
+        res.render('setLocation', data);
+    });
+
+}
+
+router.post(updateLocationURL, updateLocation);
+function updateLocation(req, res, next) {
+    const sensorId = req.body.sensorId;
+    const loc = req.body.loc;
+    const queryParams = [loc, sensorId];
+    console.log(queryParams);
+    connection.query(updateLocationQUERY, queryParams, function(err, rows, fields) {
+        if(err) {
+                throw err;
+        }
+        res.redirect(setLocationURL);
     });
 }
 

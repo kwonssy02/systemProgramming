@@ -56,7 +56,7 @@ function addComment(req, res, next) {
     const author = req.body.author;
     const content = req.body.content;
     const queryParams = [imageId, author, content];
-    console.log(queryParams);
+    //console.log(queryParams);
     connection.query(addCommentQUERY, queryParams, function(err, rows, fields) {
         if(err) {
                 throw err;
@@ -113,7 +113,7 @@ function updateLocation(req, res, next) {
     const sensorId = req.body.sensorId;
     const loc = req.body.loc;
     const queryParams = [loc, sensorId];
-    console.log(queryParams);
+    //console.log(queryParams);
     connection.query(updateLocationQUERY, queryParams, function(err, rows, fields) {
         if(err) {
                 throw err;

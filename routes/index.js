@@ -27,6 +27,8 @@ const selectLocationsQuery = ("SELECT sensorId, location FROM sensor");
 const updateLocationURL = ("/updateLocation");
 const updateLocationQUERY = ("UPDATE sensor SET location = ? WHERE sensorId = ?");
 
+const getCurrentTimeURL = ("/getCurrentTime");
+
 //index.ejs 홈
 router.get(homeURL, home);
 function home(req, res, next) {
@@ -120,6 +122,35 @@ function updateLocation(req, res, next) {
         }
         res.redirect(setLocationURL);
     });
+}
+
+//index.ejs 홈
+router.get(getCurrentTimeURL, getCurrentTime);
+function getCurrentTime(req, res, next) {
+    
+    var date = new Date();
+
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
+
+    var min  = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
+
+    var sec  = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
+
+    var year = date.getFullYear();
+
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
+
+    var day  = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
+
+    // res.writeHead(200, {'Content-Type': 'text/html'});
+    res.json(hour+":"+min+":"+sec);
+    
+
 }
 
 module.exports = router;

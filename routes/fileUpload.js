@@ -66,7 +66,7 @@ module.exports = function(app) {
  	function uploadFile(imageId,fieldname, file, filename, encoding, mimetype) {
 		//console.log('newImageId: ' + imageId);
         console.log('file:'+filename);
-        var dirname = ".";
+        var dirname = "./public";
         //var dirname = "..";
         var newPath = dirname + "/images/";
         //var saveTo = path.join(newPath, path.basename(fieldname));

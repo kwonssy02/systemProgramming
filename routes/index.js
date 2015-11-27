@@ -9,8 +9,10 @@ router.get('/', function(req, res, next) {
 });
 */
 
+const limitNum = "5";
+
 const homeURL = ("/");
-const selectPostsQuery = ("SELECT imageId, location, DATE_FORMAT(regiDate, '%Y/%m/%d %H:%i:%s') as regiDate, TIMESTAMPDIFF(SECOND, regiDate, now()) secDiff FROM image ORDER BY regiDate DESC LIMIT 10");
+const selectPostsQuery = ("SELECT imageId, location, DATE_FORMAT(regiDate, '%Y/%m/%d %H:%i:%s') as regiDate, TIMESTAMPDIFF(SECOND, regiDate, now()) secDiff FROM image ORDER BY regiDate DESC LIMIT " + limitNum);
 const selectCommentsQuery = ("SELECT imageId, author, content, DATE_FORMAT(regiDate, '%Y/%m/%d %H:%i:%s') as regiDate FROM comment ORDER BY regiDate ASC");
 
 const addCommentURL = ("/addComment");
@@ -18,7 +20,7 @@ const addCommentQUERY = ("INSERT INTO comment (imageId, author, content, regiDat
 const selectCommentsByImageIdQuery = ("SELECT imageId, author, content, DATE_FORMAT(regiDate, '%Y/%m/%d %H:%i:%s') as regiDate FROM comment WHERE imageId = ? ORDER BY regiDate ASC");
 
 const selectMorePostsURL = ("/morePosts/:imageId")
-const selectMorePostsQuery = ("SELECT imageId, location, DATE_FORMAT(regiDate, '%Y/%m/%d %H:%i:%s') as regiDate, TIMESTAMPDIFF(SECOND, regiDate, now()) secDiff FROM image where regiDate < (SELECT regiDate from image where imageId = ?) ORDER BY regiDate DESC LIMIT 10");
+const selectMorePostsQuery = ("SELECT imageId, location, DATE_FORMAT(regiDate, '%Y/%m/%d %H:%i:%s') as regiDate, TIMESTAMPDIFF(SECOND, regiDate, now()) secDiff FROM image where regiDate < (SELECT regiDate from image where imageId = ?) ORDER BY regiDate DESC LIMIT " + limitNum);
 const selectMoreCommentsQuery = ("SELECT A.imageId imageId, A.author author, A.content content, DATE_FORMAT(A.regiDate, '%Y/%m/%d %H:%i:%s') as regiDate FROM comment A LEFT JOIN image B ON A.imageId = B.imageId where B.regiDate < (SELECT regiDate from image where imageId = ?) ORDER BY A.regiDate ASC");
 
 const setLocationURL = ("/setLocation");

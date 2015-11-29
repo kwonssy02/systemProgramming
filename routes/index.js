@@ -29,7 +29,7 @@ const selectLocationsQuery = ("SELECT sensorId, location FROM sensor");
 const updateLocationURL = ("/updateLocation");
 const updateLocationQUERY = ("UPDATE sensor SET location = ? WHERE sensorId = ?");
 
-const getCurrentTimeURL = ("/getCurrentTime");
+const getDateURL = ("/getDate");
 
 //index.ejs 홈
 router.get(homeURL, home);
@@ -127,8 +127,8 @@ function updateLocation(req, res, next) {
 }
 
 //index.ejs 홈
-router.get(getCurrentTimeURL, getCurrentTime);
-function getCurrentTime(req, res, next) {
+router.get(getDateURL, getDateTime);
+function getDateTime(req, res, next) {
     
     var date = new Date();
 
@@ -142,6 +142,7 @@ function getCurrentTime(req, res, next) {
     sec = (sec < 10 ? "0" : "") + sec;
 
     var year = date.getFullYear();
+    year %= 100;
 
     var month = date.getMonth() + 1;
     month = (month < 10 ? "0" : "") + month;
@@ -150,7 +151,9 @@ function getCurrentTime(req, res, next) {
     day = (day < 10 ? "0" : "") + day;
 
     // res.writeHead(200, {'Content-Type': 'text/html'});
-    res.json(hour+":"+min+":"+sec);
+    var result = {};
+    result["time"] = year+""+month+""+day;
+    res.json(result);
     
 
 }
